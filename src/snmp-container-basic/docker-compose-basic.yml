@@ -1,0 +1,30 @@
+version: '3.8'
+
+# NOTE; This docker-compose file is a basic example of how to run an SNMP simulator using 
+# the tandrup/snmpsim image. It sets up a container named "snmp-test" that listens on 
+# UDP port 161 for SNMP requests. 
+# 
+# The environment variables configure the SNMP user, authentication protocol, 
+# authentication password, privacy protocol, and privacy password.  
+#
+# The Dockerfile is not used in this example, as the image is
+# pulled directly from Docker Hub. If you want to customize the image, you can create
+# your own Dockerfile and build it locally, then reference it in the docker-compose file.
+
+
+
+
+services:
+  snmp-test:
+    image: tandrup/snmpsim
+    container_name: snmp-test
+    restart: unless-stopped
+    ports:
+      - "161:161/udp"
+    environment:
+      - SNMP_USER=sikkerBruker
+      - SNMP_AUTH_PROTOCOL=SHA
+      - SNMP_AUTH_PASSWORD=MinAuthPass
+      - SNMP_PRIV_PROTOCOL=AES
+      - SNMP_PRIV_PASSWORD=MinPrivPass
+

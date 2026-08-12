@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  # The Mock HP Workstation Agent
+  mock_z2_g9_agent:
+    image: ubuntu:24.04
+    container_name: simulated_z2_mini
+    ports:
+      - "1161:161/udp" # Host 1161 maps to Container 161
+    volumes:
+      - ./mock_snmpd.conf:/etc/snmp/snmpd.conf
+    command: >
+      bash -c "apt-get update && apt-get install -y snmpd snmp && 
+      snmpd -f -Lo -C -c /etc/snmp/snmpd.conf"
+
+  # The Central Monitoring/Verification Daemon
+  snmp_receiver:
+    image: ubuntu:24.04
+    container_name: lab_snmp_receiver
+    ports:
+      - "1162:162/udp" # Host 1162 maps to Container 162
+    volumes:
+      - ./snmptrapd.conf:/etc/snmp/snmptrapd.conf
+    command: >
+      bash -c "apt-get update && apt-get install -y snmpd snmp && 
+      snmptrapd -f -Lo -C -c /etc/snmp/snmptrapd.conf"
